@@ -1,0 +1,65 @@
+body {
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.title {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.title a {
+  text-decoration: none;
+  color: black;
+}
+
+.big-title {
+  font-size: 3rem;
+  font-weight: 900;
+}
+
+.small-title {
+  margin-bottom: 0.5rem;
+  font-size: 2.1rem;
+}
+
+.main-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 700px;
+}
+
+.bio {
+  display: flex;
+  align-items: center;
+}
+
+.bio-avatar {
+  display: flex;
+  margin-right: 10px;
+  width: 50px;
+  height: 50px;
+  background-color: blue;
+  border-radius: 50%;
+}
+
+.bio-content {
+  word-wrap: break-word;
+}
+
+.article-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.footer {
+  margin: 2rem;
+}
+
+.article-content {
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-self: flex-start;
+}
