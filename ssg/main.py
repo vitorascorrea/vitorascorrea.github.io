@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 from markdown import markdown
 
 
-class ContentFile:
+class ArticleParser:
   def __init__(self, raw_content):
     self.raw_content = raw_content
     self.date, self.title = self.metadata()
@@ -26,19 +26,21 @@ class ContentFile:
 class BaseFile:
   def __init__(self, raw_content, blog_metadata):
     self.raw_content = raw_content
-    self.bs_object = BeautifulSoup(raw_content, features="html.parser")
-    self.update_bs_object_with_metadata(blog_metadata)
+    self.soup = BeautifulSoup(raw_content, features="html.parser")
+    self.update_soup_with_metadata(blog_metadata)
 
   def to_string(self):
-    stringified = self.bs_object.prettify(formatter=None)
+    stringified = self.soup.prettify(formatter=None)
 
     return stringified
 
-  def update_bs_object_with_metadata(self, metadata):
-    self.bs_object.title.string = metadata["title"]
-    bio_content_node = self.bs_object.find(id="bio-content")
+  def update_soup_with_metadata(self, metadata):
+    self.soup.title.string = metadata["title"]
+    blog_title_node = self.soup.find(id="blog-title")
+    blog_title_node.string = metadata["title"]
+    bio_content_node = self.soup.find(id="bio-content")
     bio_content_node.string = metadata["bio"]
-    footer_node = self.bs_object.find(id="footer")
+    footer_node = self.soup.find(id="footer")
     footer_node.string = "© {} - {}".format(datetime.date.today().year, metadata["footer"])
 
 
@@ -50,25 +52,25 @@ class ArticleFile(BaseFile):
     self.excerpt = ""
 
   def update_article_title(self, title):
-    article_title_node = self.bs_object.find(id="article-title")
+    article_title_node = self.soup.find(id="article-title")
     article_title_node.string = title
     self.title = title
 
   def update_date(self, date):
-    article_date_node = self.bs_object.find(id="date")
+    article_date_node = self.soup.find(id="date")
     article_date_node.string = date
     self.date = date
 
   def update_content(self, markdown_content):
     html_content = markdown(markdown_content)
-    article_content_node = self.bs_object.find(id="content")
+    article_content_node = self.soup.find(id="content")
     article_content_node.string = html_content
-    self.excerpt = html_content
+    self.excerpt = article_content_node.text[:100] + "..."
 
 
 class IndexFile(BaseFile):
   def add_articles(self, articles):
-    article_list_node = self.bs_object.find(id = "article-list")
+    article_list_node = self.soup.find(id = "article-list")
     articles_raw_strings = []
 
     for file_name, article in articles.items():
@@ -110,8 +112,11 @@ class Writer:
     self.copy_assets()
 
   def clear_docs_folder(self):
-    shutil.rmtree("docs", ignore_errors=False, onerror=None)
-    os.mkdir("docs")
+    dir_name = "docs"
+
+    for item in os.listdir(dir_name):
+        if item.endswith(".html") or item.endswith(".css"):
+            os.remove(os.path.join(dir_name, item))
 
   def write_index(self):
     f = open("docs/index.html", "x")
@@ -157,7 +162,7 @@ class Compiler:
           metadata = self.get_file_string_content(path)
         else:
           content_files.append(
-            ContentFile(self.get_file_string_content(path))
+            ArticleParser(self.get_file_string_content(path))
           )
 
     content_files.sort(key=lambda c: c.date, reverse=True)
