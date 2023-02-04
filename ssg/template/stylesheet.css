@@ -63,3 +63,7 @@ body {
   flex-direction: column;
   align-self: flex-start;
 }
+
+.article-title {
+  margin-bottom: 0.5rem;
+}
