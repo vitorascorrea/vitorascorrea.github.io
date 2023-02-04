@@ -131,6 +131,7 @@ class Writer:
 
   def copy_assets(self):
     shutil.copyfile("ssg/template/stylesheet.css", "docs/stylesheet.css")
+    shutil.copyfile("ssg/template/avatar.jpeg", "docs/avatar.jpeg")
 
 
 class Compiler:

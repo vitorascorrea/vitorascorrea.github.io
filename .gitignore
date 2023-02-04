@@ -1,1 +1,4 @@
 .vscode
+.DS_Store
+docs/.DS_Store
+template/.DS_Store

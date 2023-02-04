@@ -42,6 +42,10 @@ body {
   height: 50px;
   background-color: blue;
   border-radius: 50%;
+  background-image: url("avatar.jpeg");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .bio-content {
