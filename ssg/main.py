@@ -9,7 +9,7 @@ class ArticleParser:
   def __init__(self, raw_content):
     self.raw_content = raw_content
     self.date, self.title = self.metadata()
-    self.html_content = self.html_content()
+    self.html_content = self.convert_markdown_to_html()
 
   def metadata(self):
     metadata = self.raw_content.split("---")[1].split("\n")[1:]
@@ -18,7 +18,7 @@ class ArticleParser:
 
     return date, title
 
-  def html_content(self):
+  def convert_markdown_to_html(self):
     content = self.raw_content.split("---")[-1]
     return markdown(content)
 
@@ -61,11 +61,12 @@ class ArticleFile(BaseFile):
     article_date_node.string = date
     self.date = date
 
-  def update_content(self, markdown_content):
-    html_content = markdown(markdown_content)
+  def update_content(self, html_content):
     article_content_node = self.soup.find(id="content")
     article_content_node.string = html_content
-    self.excerpt = article_content_node.text[:100] + "..."
+
+    excerpt_soup = BeautifulSoup(html_content, features="html.parser")
+    self.excerpt = excerpt_soup.get_text()[:100] + "..."
 
 
 class IndexFile(BaseFile):
