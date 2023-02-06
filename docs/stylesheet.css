@@ -1,11 +1,25 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Lato', sans-serif;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+  margin: 0 auto;
+  padding: 0.5em;
+}
+
+blockquote {
+  padding-left: 1em;
+  font-style: italic;
+  border-left: solid 2px gray;
+}
+
 body {
   display: flex;
   justify-content: center;
   font-size: 16px;
-}
-
-.title {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 .title a {
@@ -59,6 +73,7 @@ body {
 
 .footer {
   margin: 2rem;
+  padding: 2rem;
 }
 
 .article-content {
